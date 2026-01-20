@@ -352,3 +352,9 @@ class ScheduleCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
+class AdminDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "admin/dashboard.html"
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser

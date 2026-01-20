@@ -1,6 +1,5 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import add_announcement_comment
 
 from .views import (
     # public pages
@@ -11,6 +10,9 @@ from .views import (
     # auth
     StudentHubLoginView, StudentHubLogoutView, SignupView,
 
+    # admin dashboard
+    AdminDashboardView,
+
     # staff-only (CRUD)
     AnnouncementDetailView, AnnouncementCreateView, AnnouncementUpdateView, AnnouncementDeleteView,
     ScheduleCreateView, ScheduleUpdateView, ScheduleDeleteView,
@@ -19,11 +21,8 @@ from .views import (
     FAQCreateView, FAQUpdateView, FAQDeleteView,
     ContactMessagesListView,
 
-
-    # likes
-    toggle_announcement_like,
-
-
+    # likes + comments
+    toggle_announcement_like, add_announcement_comment,
 )
 
 urlpatterns = [
@@ -41,12 +40,16 @@ urlpatterns = [
     path("faqs/", FAQListView.as_view(), name="faqs"),
     path("contact/", ContactPageView.as_view(), name="contact"),
 
+    # ✅ ---------- ADMIN DASHBOARD ----------
+    path("admin/dashboard/", AdminDashboardView.as_view(), name="admin_dashboard"),
+
     # ---------- ANNOUNCEMENTS ----------
     path("announcements/<int:pk>/", AnnouncementDetailView.as_view(), name="announcement_detail"),
     path("announcements/new/", AnnouncementCreateView.as_view(), name="announcement_create"),
     path("announcements/<int:pk>/edit/", AnnouncementUpdateView.as_view(), name="announcement_update"),
     path("announcements/<int:pk>/delete/", AnnouncementDeleteView.as_view(), name="announcement_delete"),
     path("announcements/<int:pk>/like/", toggle_announcement_like, name="announcement_like"),
+    path("announcements/<int:pk>/comment/", add_announcement_comment, name="announcement_comment"),
 
     # ---------- SCHEDULES CRUD ----------
     path("schedules/new/", ScheduleCreateView.as_view(), name="schedule_create"),
@@ -72,7 +75,4 @@ urlpatterns = [
 
     # ---------- STAFF MESSAGES ----------
     path("contact/messages/", ContactMessagesListView.as_view(), name="contact_messages"),
-    path("announcements/<int:pk>/like/", toggle_announcement_like, name="announcement_like"),
-    path("announcements/<int:pk>/comment/", add_announcement_comment, name="announcement_comment"),
-
 ]
