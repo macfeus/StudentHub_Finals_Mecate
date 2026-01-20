@@ -1,0 +1,29 @@
+{% extends "app/base.html" %}
+{% block title %}Resources | StudentHub{% endblock %}
+{% block content %}
+<h1>Resources</h1>
+
+<form method="get">
+  <input name="q" placeholder="Search resources..." value="{{ request.GET.q }}">
+  <button class="btn-primary">Search</button>
+</form>
+
+{% if user.is_authenticated %}
+  <p><a class="btn-primary" href="{% url 'resource_create' %}">+ Add Resource</a></p>
+{% endif %}
+
+<div class="feed">
+  {% for r in resources %}
+    <div class="card">
+      <div class="card-header">
+        <strong><a href="{% url 'resource_detail' r.pk %}">{{ r.title }}</a></strong>
+        <small>{{ r.created_at|date:"M d, Y" }}</small>
+      </div>
+      <div class="card-body">{{ r.description|truncatechars:160 }}</div>
+    </div>
+  {% empty %}
+    <div class="card">No resources yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}
+>

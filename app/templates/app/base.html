@@ -2,17 +2,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}StudentHub{% endblock %}</title>
+
+  <!-- (Optional) You may REMOVE favicon lines too if you want zero logo usage -->
+  <!-- <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}"> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <script defer src="{% static 'js/navbar.js' %}"></script>
 </head>
 <body>
 
-    {% include 'app/navbar.html' %}
+  {% include "app/navbar.html" %}
 
-    {% block content %}
-    {% endblock content %}
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
 
-    <script src="{% static 'js/base.js' %}"></script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+{% extends "app/base.html" %}
+{% block title %}Event Form | StudentHub{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Event</h2>
+  <form method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn-primary" type="submit">Save</button>
+    <a class="btn-secondary" href="{% url 'events' %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

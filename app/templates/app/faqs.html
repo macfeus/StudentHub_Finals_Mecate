@@ -1,0 +1,40 @@
+{% extends "app/base.html" %}
+{% block title %}FAQs | StudentHub{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h2>FAQs</h2>
+
+  <form method="get" class="searchbar">
+    <input type="text" name="q" placeholder="Search FAQs…" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if user.is_staff %}
+    <a class="btn-primary" href="{% url 'faq_create' %}">+ New FAQ</a>
+  {% endif %}
+</div>
+
+<div class="feed">
+  {% for f in faqs %}
+    <div class="card">
+      <div class="card-header">
+        <strong>{{ f.question }}</strong>
+      </div>
+
+      <div class="card-body">
+        <p>{{ f.answer|linebreaksbr }}</p>
+      </div>
+
+      {% if user.is_staff %}
+        <div class="card-actions">
+          <a class="link" href="{% url 'faq_update' f.pk %}">Edit</a>
+          <a class="link danger" href="{% url 'faq_delete' f.pk %}">Delete</a>
+        </div>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="card"><p>No FAQs yet.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

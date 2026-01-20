@@ -1,6 +1,105 @@
-{% extends 'app/base.html' %}
-{% load static %}
+{% extends "app/base.html" %}
+{% block title %}Home | StudentHub{% endblock %}
+
 {% block content %}
-    <h1>Hello World</h1>
-<img src="{% static 'images/logo.png' %}" alt="Logo" width="120">
-{% endblock content %}
+<div class="page-head">
+  <div>
+    <h2>Announcements</h2>
+    <div class="muted">Stay updated with class reminders and announcements.</div>
+  </div>
+
+  <form method="get" class="searchbar">
+    <input type="text" name="q" placeholder="Search announcements…" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if user.is_authenticated and user.is_staff %}
+    <a class="btn-primary" href="{% url 'announcement_create' %}">+ New Announcement</a>
+  {% endif %}
+</div>
+
+<div class="feed">
+  {% for announcement in announcements %}
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-title">{{ announcement.title }}</div>
+          <div class="card-sub">
+            Posted by <strong>{{ announcement.posted_by }}</strong> •
+            {{ announcement.date_posted|date:"M d, Y • h:i A" }}
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <p>{{ announcement.content|linebreaksbr }}</p>
+      </div>
+
+      <div class="actions">
+        <div class="action-left">
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'announcement_like' announcement.pk %}" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <button class="pill pill-primary" type="submit">
+                👍 Like <span class="muted">({{ announcement.likes.count }})</span>
+              </button>
+            </form>
+          {% else %}
+            <span class="pill">
+              👍 Likes <span class="muted">({{ announcement.likes.count }})</span>
+            </span>
+          {% endif %}
+
+          <a class="pill" href="{% url 'announcement_detail' announcement.pk %}">
+            💬 Comments <span class="muted">({{ announcement.comments.count }})</span>
+          </a>
+        </div>
+
+        {% if user.is_authenticated and user.is_staff %}
+          <div class="action-left">
+            <a class="pill" href="{% url 'announcement_update' announcement.pk %}">Edit</a>
+            <a class="pill pill-danger" href="{% url 'announcement_delete' announcement.pk %}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if announcement.comments.all %}
+        <div class="comments">
+          {% for c in announcement.comments.all|slice:":2" %}
+            <div class="comment">
+              <strong>{{ c.user.username }}</strong> — {{ c.text }}
+              <small>{{ c.created_at|date:"M d, Y • h:i A" }}</small>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'announcement_comment' announcement.pk %}" class="comment-form">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <textarea name="text" placeholder="Write a comment…"></textarea>
+          <button type="submit">Post comment</button>
+        </form>
+      {% else %}
+        <p class="muted" style="margin-top:12px;">Login to react and comment.</p>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="card"><p class="muted">No announcements yet.</p></div>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+  <div class="pagination" style="margin-top:18px;">
+    {% if page_obj.has_previous %}
+      <a class="pill" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Prev</a>
+    {% endif %}
+    <span class="muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a class="pill" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}

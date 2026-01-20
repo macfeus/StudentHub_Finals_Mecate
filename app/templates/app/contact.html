@@ -1,0 +1,21 @@
+{% extends "app/base.html" %}
+{% block title %}Contact | StudentHub{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h2>Contact</h2>
+  {% if user.is_authenticated %}
+    <a class="btn-secondary" href="{% url 'contact_messages' %}">View Messages</a>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h3 class="card-title">Send us a message</h3>
+
+  <form method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn-primary" type="submit">Send</button>
+  </form>
+</div>
+{% endblock %}

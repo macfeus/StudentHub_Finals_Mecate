@@ -1,0 +1,46 @@
+{% extends "app/base.html" %}
+{% block title %}Events | StudentHub{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h2>Events</h2>
+
+  <form method="get" class="searchbar">
+    <input type="text" name="q" placeholder="Search events…" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if user.is_authenticated %}
+    <a class="btn-primary" href="{% url 'event_create' %}">+ New Event</a>
+  {% endif %}
+</div>
+
+<div class="feed">
+  {% for e in events %}
+    <div class="card">
+      <div class="card-header">
+        <strong>{{ e.event_title }}</strong>
+        <small>{{ e.event_date|date:"M d, Y • h:i A" }}</small>
+      </div>
+
+      <div class="card-meta">
+        <span><strong>Location:</strong> {{ e.location }}</span>
+        <span><strong>By:</strong> {{ e.created_by }}</span>
+      </div>
+
+      <div class="card-body">
+        <p>{{ e.event_description|linebreaksbr }}</p>
+      </div>
+
+      {% if user.is_authenticated %}
+      <div class="card-actions">
+        <a class="link" href="{% url 'event_update' e.pk %}">Edit</a>
+        <a class="link danger" href="{% url 'event_delete' e.pk %}">Delete</a>
+      </div>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="card"><p>No events yet.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "app/base.html" %}
+{% block title %}Delete Resource | StudentHub{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Delete Resource</h2>
+  <p>Are you sure you want to delete <strong>{{ object.title }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn-danger" type="submit">Yes, delete</button>
+    <a class="btn-secondary" href="{% url 'resources' %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

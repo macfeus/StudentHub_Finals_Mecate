@@ -1,8 +1,32 @@
-<header>
-{% block content %}
-    <a href="{% url 'home' %}">Home</a>
-    <a href="{% url 'about' %}">About</a>
-    <a href="{% url 'blog' %}">Blog</a>
+<header class="navbar">
+  <div class="nav-left">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="brand-text">StudentHub</span>
+    </a>
+  </div>
 
-{% endblock content %}
+  <button class="nav-toggle" type="button" aria-label="Open menu">☰</button>
+
+  <nav class="nav-center" id="navMenu">
+    <a class="nav-item" href="{% url 'home' %}">Home</a>
+    <a class="nav-item" href="{% url 'schedules' %}">Schedules</a>
+    <a class="nav-item" href="{% url 'events' %}">Events</a>
+    <a class="nav-item" href="{% url 'resources' %}">Resources</a>
+    <a class="nav-item" href="{% url 'faqs' %}">FAQs</a>
+    <a class="nav-item" href="{% url 'contact' %}">Contact</a>
+
+    {% if user.is_authenticated and user.is_staff %}
+      <a class="nav-btn" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button class="nav-btn" type="submit">Logout</button>
+      </form>
+    {% else %}
+      <a class="nav-btn" href="{% url 'login' %}">Login</a>
+      <a class="nav-btn" href="{% url 'signup' %}">Sign up</a>
+    {% endif %}
+  </nav>
 </header>

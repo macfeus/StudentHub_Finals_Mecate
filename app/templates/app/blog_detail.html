@@ -1,13 +1,13 @@
-<{% extends 'app/base.html' %}
-{% load static %}
+{% extends "base.html" %}
 {% block content %}
-       <div class="post-entry">
-            <h2><a href="">{{ post.title }}</a></h2>
-            <p>{{ post.body }}</p>
-       </div>
-    <a href="{% url 'blog_update' object.pk %}">+ Edit Blog</a>
-    <a href="{% url 'blog_delete' object.pk %}">- Delete Blog</a>
+<div class="card">
+  <h2>{{ announcement.title }}</h2>
+  <p class="muted">Posted by {{ announcement.posted_by.username }} • {{ announcement.date_posted|date:"M d, Y h:i A" }}</p>
+  <p>{{ announcement.content|linebreaksbr }}</p>
+</div>
+<p><a href="{% url 'home' %}">← Back</a></p>
+{% endblock %}
 
-{% endblock content %}
+
 
 t

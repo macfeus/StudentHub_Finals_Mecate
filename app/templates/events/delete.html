@@ -1,0 +1,15 @@
+{% extends "app/base.html" %}
+{% block title %}Delete Event | StudentHub{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Delete Event</h2>
+  <p>Are you sure you want to delete <strong>{{ object.event_title }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn-danger" type="submit">Yes, delete</button>
+    <a class="btn-secondary" href="{% url 'events' %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}
+

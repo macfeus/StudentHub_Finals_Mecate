@@ -1,0 +1,23 @@
+{% extends "app/base.html" %}
+{% block title %}Announcement | StudentHub{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <strong>{{ announcement.title }}</strong>
+    <small>{{ announcement.date_posted|date:"M d, Y • h:i A" }}</small>
+  </div>
+
+  <div class="card-body">
+    <p>{{ announcement.content|linebreaksbr }}</p>
+  </div>
+
+  <div class="card-actions">
+    <a class="btn-secondary" href="{% url 'home' %}">Back</a>
+    {% if user.is_authenticated %}
+      <a class="btn-primary" href="{% url 'announcement_update' announcement.pk %}">Edit</a>
+      <a class="btn-danger" href="{% url 'announcement_delete' announcement.pk %}">Delete</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "app/base.html" %}
+{% block title %}Login | StudentHub{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <div class="page-head">
+      <h2>Login</h2>
+      <p class="muted">Welcome back to StudentHub.</p>
+    </div>
+
+    <form method="post" class="form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn-primary" type="submit">Login</button>
+    </form>
+
+    <hr style="margin:16px 0; border:none; border-top:1px solid #e5e7eb;">
+
+    <p class="muted" style="text-align:center;">
+      Don’t have an account?
+    </p>
+    <div style="display:flex; justify-content:center;">
+      <a class="nav-btn" href="{% url 'signup' %}">Create account</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

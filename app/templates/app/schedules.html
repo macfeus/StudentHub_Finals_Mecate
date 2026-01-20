@@ -1,0 +1,52 @@
+{% extends "app/base.html" %}
+{% block title %}Schedules | StudentHub{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h2>Schedules</h2>
+
+  <form method="get" class="searchbar">
+    <input type="text" name="k" placeholder="Search subject/class…" value="{{ request.GET.k }}">
+    <select name="day">
+      <option value="">All days</option>
+      <option value="Mon">Mon</option>
+      <option value="Tue">Tue</option>
+      <option value="Wed">Wed</option>
+      <option value="Thu">Thu</option>
+      <option value="Fri">Fri</option>
+      <option value="Sat">Sat</option>
+      <option value="Sun">Sun</option>
+    </select>
+    <button type="submit">Search</button>
+  </form>
+
+  {% if user.is_staff %}
+    <a class="btn-primary" href="{% url 'schedule_create' %}">+ New Schedule</a>
+  {% endif %}
+</div>
+
+<div class="feed">
+  {% for s in schedules %}
+    <div class="card">
+      <div class="card-header">
+        <strong>{{ s.class_name }}</strong>
+        <small>{{ s.day }} • {{ s.time }}</small>
+      </div>
+
+      <div class="card-body">
+        <p><b>Instructor:</b> {{ s.instructor }}</p>
+        {% if s.room %}<p><b>Room:</b> {{ s.room }}</p>{% endif %}
+      </div>
+
+      {% if user.is_staff %}
+        <div class="card-actions">
+          <a class="link" href="{% url 'schedule_update' s.pk %}">Edit</a>
+          <a class="link danger" href="{% url 'schedule_delete' s.pk %}">Delete</a>
+        </div>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="card"><p>No schedules yet.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

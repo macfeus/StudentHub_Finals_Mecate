@@ -1,0 +1,23 @@
+{% extends "app/base.html" %}
+{% block title %}FAQ | StudentHub{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <strong>{{ faq.question }}</strong>
+    <small>{{ faq.created_at|date:"M d, Y" }}</small>
+  </div>
+
+  <div class="card-body">
+    <p>{{ faq.answer|linebreaksbr }}</p>
+  </div>
+
+  <div class="card-actions">
+    <a class="btn-secondary" href="{% url 'faqs' %}">Back</a>
+    {% if user.is_authenticated %}
+      <a class="btn-primary" href="{% url 'faq_update' faq.pk %}">Edit</a>
+      <a class="btn-danger" href="{% url 'faq_delete' faq.pk %}">Delete</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

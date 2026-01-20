@@ -1,0 +1,28 @@
+{% extends "app/base.html" %}
+{% block title %}Admin Dashboard | StudentHub{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h2>Admin Dashboard</h2>
+  <p class="muted">Only staff/admin can access this page.</p>
+</div>
+
+<div class="feed">
+  <div class="card">
+    <strong>Quick create</strong>
+    <div class="card-actions">
+      <a class="btn-primary" href="{% url 'announcement_create' %}">Announcement</a>
+      <a class="btn-primary" href="{% url 'schedule_create' %}">Schedule</a>
+      <a class="btn-primary" href="{% url 'event_create' %}">Event</a>
+      <a class="btn-primary" href="{% url 'resource_create' %}">Resource</a>
+      <a class="btn-primary" href="{% url 'faq_create' %}">FAQ</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <strong>Go to Django Admin</strong>
+    <p class="muted">Full admin panel (add/edit/delete)</p>
+    <a class="link" href="/admin/" target="_blank">Open /admin/</a>
+  </div>
+</div>
+{% endblock %}

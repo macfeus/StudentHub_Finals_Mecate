@@ -1,0 +1,44 @@
+{% extends "app/base.html" %}
+{% block title %}Resources | StudentHub{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h2>Resources</h2>
+
+  <form method="get" class="searchbar">
+    <input type="text" name="q" placeholder="Search resources…" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if user.is_staff %}
+    <a class="btn-primary" href="{% url 'resource_create' %}">+ New Resource</a>
+  {% endif %}
+</div>
+
+<div class="feed">
+  {% for r in resources %}
+    <div class="card">
+      <div class="card-header">
+        <strong>{{ r.title }}</strong>
+        <small>{{ r.uploaded_at|date:"M d, Y" }}</small>
+      </div>
+
+      <div class="card-body">
+        <p>{{ r.description|default:"" }}</p>
+        {% if r.link %}
+          <p><a class="link" href="{{ r.link }}" target="_blank" rel="noopener">Open link</a></p>
+        {% endif %}
+      </div>
+
+      {% if user.is_staff %}
+        <div class="card-actions">
+          <a class="link" href="{% url 'resource_update' r.pk %}">Edit</a>
+          <a class="link danger" href="{% url 'resource_delete' r.pk %}">Delete</a>
+        </div>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="card"><p>No resources yet.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}
